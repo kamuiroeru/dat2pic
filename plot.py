@@ -1,39 +1,32 @@
 # .cの方を変更して、もろもろをそのまま出力させ、こちら側で平均する
 
-import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 from itertools import product
 import re
 
-# floatにキャストできるか返す
-def is_float(s: str) -> bool:
-    try:
-        float(s)
-    except ValueError:
-        return False
-    else:
-        return True
-
 
 # something.datを読み込む
-def load_UVT_DAT(fname):
+def load_UVT_DAT(fname, columns='XYUVT'):
 
-    # 何行skipするか調べる
-    skr = 0
+    # 行とラベルを対応させる
+    label2column = {label:lc for lc, label in enumerate(columns)}
+    l2c = label2column
+
+    # 読み込む
+    outer_list = [[] for _ in range(len(columns))]
     for lc, line in enumerate(open(fname)):
         line = line.rstrip()
         if line:
-            flags = [is_float(s) for s in re.split('\s+', line) if s]
-            if not False in set(flags):
-                skr = lc
-                break
-
-    # 読み込む
-    df = pd.read_csv(fname, delimiter='\s+', names='XYUVT', skiprows=skr)
+            try:
+                inner_list = [float(s) for s in re.split('\s+', line) if s]
+            except ValueError:
+                continue
+            for lc, val in enumerate(inner_list):
+                outer_list[lc].append(val)
 
     # 行列の大きさを計算
-    xsize, ysize = len(set(df['X'])), len(set(df['Y']))
+    xsize, ysize = len(set(outer_list[l2c['X']])), len(set(outer_list[l2c['Y']]))
 
     # X, Y を適切な引数のベクトルに変更
     X, Y = np.meshgrid(range(xsize), range(ysize))
@@ -45,9 +38,9 @@ def load_UVT_DAT(fname):
     V = np.zeros((ysize, xsize))
 
     # 代入
-    T[Y, X] = df['T']
-    U[Y, X] = df['U']
-    V[Y, X] = df['V']
+    T[Y, X] = outer_list[l2c['T']]
+    U[Y, X] = outer_list[l2c['U']]
+    V[Y, X] = outer_list[l2c['V']]
 
     # y軸を反転(matplotlibのy軸は下向きが正なので。)
     T = T[::-1, :]
@@ -57,9 +50,9 @@ def load_UVT_DAT(fname):
     return X, Y, U, V, T
 
 
+# もろもろ平均化、大きさ調整
 def convert_UVT(U, V, T):
 
-    # もろもろ平均化、大きさ調整
     U1, U2 = U[1:-1, :-2], U[1:-1, 1:-1]
     U = (U1 + U2) / 2
     V1, V2 = V[2:, 1:-1], V[1:-1, 1:-1]
