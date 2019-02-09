@@ -2,6 +2,8 @@
 datfile to picture
 
 
+
+
 ## Requirements
 - Numpy
 
@@ -17,7 +19,7 @@ datfile to picture
 
   
 
-### Usage
+## Usage
 
 ```shell
 # dat -> png & pdf
@@ -34,3 +36,8 @@ $ python make_gif.py "*.dat" -mt
 # if you want to select another, 1 right click
 ```
 
+
+
+## README.ja
+
+[Japanese infomation](https://github.com/kamuiroeru/dat2pic/blob/master/readme/README.ja.md)
