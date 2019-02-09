@@ -7,7 +7,7 @@ import re
 
 
 # something.datを読み込む
-def load_UVT_DAT(fname, columns='XYUVT'):
+def load_DAT(fname, columns='XYUVT'):
 
     # 行とラベルを対応させる
     label2column = {label:lc for lc, label in enumerate(columns)}
@@ -62,16 +62,17 @@ def convert_UVT(U, V, T):
     return U, V, T
 
 
+# vecの最大値と最小値をoutmaxとoutminに標準化
+def normarize(vec, outmin=0, outmax=1):
+    xmin, xmax = vec.min(), vec.max()
+    func = np.vectorize(lambda x: (x - xmin)/(xmax - xmin)*(outmax - outmin) + outmin)
+    return func(vec)
+
+
 # plotしてpdfとpngを出力
 def plot_UVT(fname):
-    X, Y, U, V, T = load_UVT_DAT(fname)
+    X, Y, U, V, T = load_DAT(fname)
 
-    # vecの最大値と最小値をoutmaxとoutminに標準化
-    def normarize(vec, outmin=0, outmax=1):
-        xmin, xmax = vec.min(), vec.max()
-        func = np.vectorize(lambda x: (x - xmin)/(xmax - xmin)*(outmax - outmin) + outmin)
-        return func(vec)
-    
     U = normarize(U, -1, 1)
     V = normarize(V, -1, 1)
     
