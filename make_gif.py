@@ -183,7 +183,7 @@ class dat:
         divider = mpl_toolkits.axes_grid1.make_axes_locatable(ax2)
         cax = divider.append_axes('right', '5%', pad='3%')
         cbar = fig2.colorbar(blocks.im, ax=ax2, cax=cax)
-        timeline2 = amp.Timeline(anim.timeline.t)
+        timeline2 = amp.Timeline(anim.timeline.t, fps=fps)
         timearray2 = timeline2.t
 
         ax2.tick_params(labelbottom=False, bottom=False) # x軸の削除
@@ -215,11 +215,12 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='DAT files -> gif')
     parser.add_argument('query', help='DAT files query')
     parser.add_argument('-mt', '--make_average_temp', action='store_true')
+    parser.add_argument('-f', '--fps', type=int, default=10)
     args = parser.parse_args()
 
     converter = dat(args.query)
-    converter.save_gif(vmin=-0.5, vmax=0.5, dpi=150)
+    converter.save_gif(vmin=-0.5, vmax=0.5, dpi=150, fps=args.fps)
     if args.make_average_temp:
-        converter.make_average_temp(dpi=150)
+        converter.make_average_temp(dpi=150, fps=args.fps)
 
 
