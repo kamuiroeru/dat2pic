@@ -211,8 +211,15 @@ class dat:
 
 
 if __name__ == '__main__':
-    converter = dat('out*.dat')
-    # converter.save_gif(vmin=-0.5, vmax=0.5, dpi=100)
-    # converter.make_average_temp(tmin=-0.5, tmax=0.5, dpi=150)
-    converter.make_average_temp(dpi=150)
+    import argparse
+    parser = argparse.ArgumentParser(description='DAT files -> gif')
+    parser.add_argument('query', help='DAT files query')
+    parser.add_argument('-mt', '--make_average_temp', action='store_true')
+    args = parser.parse_args()
+
+    converter = dat(args.query)
+    converter.save_gif(vmin=-0.5, vmax=0.5, dpi=150)
+    if args.make_average_temp:
+        converter.make_average_temp(dpi=150)
+
 
