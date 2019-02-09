@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from itertools import product
 import re
+plt.rcParams['font.size'] = 16
 
 
 # something.datを読み込む
@@ -70,7 +71,7 @@ def normarize(vec, outmin=0, outmax=1):
 
 
 # plotしてpdfとpngを出力
-def plot_UVT(fname):
+def plot_UVT(fname, vmin=-0.5, vmax=0.5, dpi=100, arrow_color='black'):
     X, Y, U, V, T = load_DAT(fname)
 
     U = normarize(U, -1, 1)
@@ -82,14 +83,14 @@ def plot_UVT(fname):
     #####################################################################
     # ここからプロット
     
-    fig, ax = plt.subplots()
-    axshowed = ax.imshow(T, cmap='jet', vmin=-0.5, vmax=0.5, interpolation='none')
+    fig, ax = plt.subplots(dpi=dpi)
+    axshowed = ax.imshow(T, cmap='jet', vmin=vmin, vmax=vmax, interpolation='none')
     cbar = fig.colorbar(axshowed)
     ux_size, uy_size = U.shape[1], V.shape[0]
     for x,y in product(range(ux_size), range(uy_size)):
         dx, dy = U[y, x], V[y, x]
         if dx or dy:
-            ax.arrow(x, y, dx, -dy, color='k', head_width=0.1, length_includes_head=True)
+            ax.arrow(x, y, dx, -dy, color=arrow_color, head_width=0.1, length_includes_head=True)
 
     ax.tick_params(labelbottom=False, bottom=False) # x軸の削除
     ax.tick_params(labelleft=False, left=False) # y軸の削除
