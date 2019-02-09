@@ -20,6 +20,15 @@ def sort_function(s: str) -> int:
         return -1
 
 
+def predict_ICYCLE(fname: str) -> int:
+    # filenameの中で、一番右にある数値を抜き出してint化
+    digit_strings = re.findall('\d+', fname)[-1]
+    if digit_strings:
+        return int(digit_strings)
+    else:
+        return -1
+
+
 def pic2gif(filequery='*.png', output_filename='sample.gif', fps=10):
     pnglist = sorted(glob(filequery), key=sort_function)
     images = [Image.open(fname) for fname in pnglist]
@@ -75,7 +84,7 @@ class dat:
         arrows = amp.blocks.Quiver(X, Y, U3d, V3d, ax=ax, t_axis=2, color='k')
         blocks = amp.blocks.Imshow(Ts, ax=ax, cmap='jet', vmin=vmin, vmax=vmax, interpolation='none')
         cbar = fig.colorbar(blocks.im,ax=ax)
-        timearray = np.array([sort_function(s) for s in datlist], dtype='i')
+        timearray = np.array([predict_ICYCLE(s) for s in datlist], dtype='i')
         timeline = amp.Timeline(timearray, fps=fps)
         anim = amp.Animation([blocks, arrows], timeline)
 
