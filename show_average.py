@@ -105,6 +105,7 @@ def reset():
 
 from plot import load_DAT, convert_UVT, normarize
 from itertools import product
+from sys import argv
 
 
 # 共有値を貯める
@@ -119,7 +120,11 @@ store['drag_flag'] = False
 # plot
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(10, 5), dpi=100)
 
-X, Y, U, V, T = load_DAT('./out_200.dat')
+try:
+    X, Y, U, V, T = load_DAT(argv[1])
+except KeyError:
+    print('select datfile "python show_average [dat_filename]"')
+    exit(0)
 
 U = normarize(U, -1, 1)
 V = normarize(V, -1, 1)
