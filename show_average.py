@@ -140,7 +140,7 @@ def average_checker(dat_fname, vmin=-0.5, vmax=0.5, arrow_color='k', dpi=100):
     for x,y in product(range(ux_size), range(uy_size)):
         dx, dy = U[y, x], V[y, x]
         if dx or dy:
-            ax1.arrow(x, y, dx, -dy, color='k', 
+            ax1.arrow(x, y, dx, -dy, color=arrow_color, 
                      head_width=0.1, length_includes_head=True)
     
     # 軸を消す
@@ -168,12 +168,12 @@ if __name__ == '__main__':
     from sys import argv
     import argparse
 
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument('filename', help='DAT file name')
-    parser.add_argument('--arrow_color', '-ac', default='black')
-    parser.add_argument('--vmax', type=float, default=-0.5)
-    parser.add_argument('--vmin', type=float, default=0.5)
-    parser.add_argument('--dpi', type=int, default=100)
+    parser.add_argument('--arrow_color', '-ac', default='black', help='arrow_color')
+    parser.add_argument('--vmax', type=float, default=-0.5, help='value max')
+    parser.add_argument('--vmin', type=float, default=0.5, help='value min')
+    parser.add_argument('--dpi', type=int, default=100, help='dpi')
     args = parser.parse_args()
 
     average_checker(args.filename, args.vmin, args.vmax,
