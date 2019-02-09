@@ -4,9 +4,18 @@ datfile to picture
 
 ## Requirements
 - Numpy
+
 - Matplotlib
+
 - Pillow
+
 - Animatplot
+
+  ```shell
+  $ pip install -r requirements.txt
+  ```
+
+  
 
 ### Usage
 
