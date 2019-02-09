@@ -221,15 +221,18 @@ class dat:
 
 if __name__ == '__main__':
     import argparse
+    from os.path import splitext as st
     parser = argparse.ArgumentParser(description='DAT files -> gif')
     parser.add_argument('query', help='DAT files query')
+    parser.add_argument('-o', help='output_filename', default='sample.gif')
     parser.add_argument('-mt', '--make_average_temp', action='store_true')
+    parser.add_argument('-mto', help='mt_output_filename', default='average_temp.gif')
     parser.add_argument('-f', '--fps', type=int, default=10)
     args = parser.parse_args()
 
     converter = dat(args.query)
-    converter.save_gif(vmin=-0.5, vmax=0.5, dpi=150, fps=args.fps)
+    converter.save_gif(output_filename=st(args.o)[0], vmin=-0.5, vmax=0.5, dpi=150, fps=args.fps)
     if args.make_average_temp:
-        converter.make_average_temp(dpi=150, fps=args.fps)
+        converter.make_average_temp(dpi=150, fps=args.fps, output_filename=st(args.mto)[0])
 
 
