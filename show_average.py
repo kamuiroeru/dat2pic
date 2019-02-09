@@ -166,7 +166,15 @@ def average_checker(dat_fname, vmin=-0.5, vmax=0.5, arrow_color='k', dpi=100):
 
 if __name__ == '__main__':
     from sys import argv
-    try:
-        average_checker(argv[1])
-    except IndexError:
-        print('select datfile "python show_average [dat_filename]"')
+    import argparse
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument('filename', help='DAT file name')
+    parser.add_argument('--arrow_color', '-ac', default='black')
+    parser.add_argument('--vmax', type=float, default=-0.5)
+    parser.add_argument('--vmin', type=float, default=0.5)
+    parser.add_argument('--dpi', type=int, default=100)
+    args = parser.parse_args()
+
+    average_checker(args.filename, args.vmin, args.vmax,
+                    args.arrow_color, args.dpi)
